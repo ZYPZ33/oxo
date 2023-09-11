@@ -86,17 +86,17 @@ def findWinner(board):
         winningThree = [placerdot, placerdot, placerdot]
         for column in board:
             if column == winningThree:
-                return dot2name[placerdot] + " row"
+                return dot2name[placerdot]
         if board[1][1] == placerdot:
             if board[0][0] == placerdot and board[2][2] == placerdot:
-                return dot2name[placerdot] + " diagonal right"
+                return dot2name[placerdot]
             if board[2][0] == placerdot and board[0][2] == placerdot:
-                return dot2name[placerdot] + " diagonal left"
+                return dot2name[placerdot]
         for i in range(3):
             for j in range(3):
                 row.append(board[j][i])
             if row == winningThree:
-                return placerdot
+                return dot2name[placerdot]
             row = []
 
 
