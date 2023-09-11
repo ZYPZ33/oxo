@@ -108,7 +108,7 @@ board = makeboard()
 if __name__ == "__main__":
     playgame = True
     while playgame:
-        if placesLeft(board) > 0:
+        if placesLeft(board) > 0 and not findWinner(board):
             print(printboard(board))
             board = placedot2(board, "player")
             board = placedot2(board, "enemy")
@@ -116,5 +116,9 @@ if __name__ == "__main__":
         else:
             print(printboard(board))
             print("Game over")
-            print(f"{findWinner(board)} wins")
+            winner = findWinner(board)
+            if winner:
+                print(f"{winner} wins")
+            else:
+                print("draw")
             playgame = False
