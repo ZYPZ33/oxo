@@ -72,11 +72,14 @@ def placedot2(board, placer):
                     board[x][y] = dot
                     return board
                 else:
-                    print("Space already filled")
+                    if placer == "player":
+                        print("Space already filled")
             else:
-                print(f"{y+1} not a valid Y coordinate")
+                if placer == "player":
+                    print(f"{y+1} not a valid Y coordinate")
         else:
-            print(f"{x+1} not a valid X coordinate")
+            if placer == "player":
+                print(f"{x+1} not a valid X coordinate")
 
 
 def findWinner(board):
