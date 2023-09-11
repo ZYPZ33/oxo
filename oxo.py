@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-from random import choice, randint
+from random import choice
 from os import system, name
-from time import sleep
 
 acceptable_values = [0, 1, 2]
 playerdot = "O"
@@ -57,6 +56,8 @@ def printboard(b):
 def placedot2(board, placer):
     originalBoard = board
     while originalBoard == board:
+        if placesLeft(board) == 0:
+            return board
         if placer == "player":
             x = int(input("Enter x coordinate: ")) - 1
             y = int(input("Enter y coordinate: ")) - 1
@@ -67,12 +68,33 @@ def placedot2(board, placer):
             dot = enemydot
         if x in acceptable_values:
             if y in acceptable_values:
-                board[x][y] = dot
-                return board
+                if board[x][y] == "_":
+                    board[x][y] = dot
+                    return board
+                else:
+                    print("Space already filled")
             else:
                 print(f"{y+1} not a valid Y coordinate")
         else:
             print(f"{x+1} not a valid X coordinate")
+
+
+def findWinner(board):
+    column = list()
+    dot2name = {playerdot: "player", enemydot: "enemy"}
+    for placerdot in [playerdot, enemydot]:
+        for row in board:
+            if row == [placerdot, placerdot, placerdot]:
+                return dot2name[placerdot]
+        if board[1][1] == placerdot:
+            if board[0][0] == placerdot and board[2][2] == placerdot:
+                return dot2name[placerdot]
+            if board[2][0] == placerdot and board[0][2] == placerdot:
+                return dot2name[placerdot]
+        for i in range(3):
+            for j in range(3):
+                column.append(board[i][j])
+            print(column)
 
 
 # init
@@ -87,4 +109,5 @@ if __name__ == "__main__":
             # clear()
         else:
             print("Game over")
+            print(f"{findWinner(board)} wins")
             playgame = False
