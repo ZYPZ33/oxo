@@ -80,21 +80,24 @@ def placedot2(board, placer):
 
 
 def findWinner(board):
-    column = list()
+    row = list()
     dot2name = {playerdot: "player", enemydot: "enemy"}
     for placerdot in [playerdot, enemydot]:
-        for row in board:
-            if row == [placerdot, placerdot, placerdot]:
-                return dot2name[placerdot]
+        winningThree = [placerdot, placerdot, placerdot]
+        for column in board:
+            if column == winningThree:
+                return dot2name[placerdot] + " row"
         if board[1][1] == placerdot:
             if board[0][0] == placerdot and board[2][2] == placerdot:
-                return dot2name[placerdot]
+                return dot2name[placerdot] + " diagonal right"
             if board[2][0] == placerdot and board[0][2] == placerdot:
-                return dot2name[placerdot]
+                return dot2name[placerdot] + " diagonal left"
         for i in range(3):
             for j in range(3):
-                column.append(board[i][j])
-            print(column)
+                row.append(board[j][i])
+            if row == winningThree:
+                return placerdot
+            row = []
 
 
 # init
@@ -108,6 +111,7 @@ if __name__ == "__main__":
             board = placedot2(board, "enemy")
             # clear()
         else:
+            print(printboard(board))
             print("Game over")
             print(f"{findWinner(board)} wins")
             playgame = False
