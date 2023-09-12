@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
 from random import choice
-from os import system, name
 
-acceptable_values = [0, 1, 2]
-playerdot = "O"
 enemydot = "X"
-
-
-def clear():
-    if name == "postix":
-        system("clear")
+playerdot = "O"
+acceptable_values = [0, 1, 2]
+dot2name = {playerdot: "player", enemydot: "enemy"}
 
 
 def makeboard():
@@ -32,28 +27,7 @@ def printboard(b):
  | {b[1][2]} | {b[2][2]}  |"
 
 
-# def placedot(board, placer):
-# while True:
-# if placesLeft(board) != 0:
-# if placer == "player":
-# xcoord = int(input("Enter x coordinate: "))
-# ycoord = int(input("Enter y coordinate: "))
-# dot = playerdot
-# else:
-# xcoord = randint(1, 3)
-# ycoord = randint(1, 3)
-# dot = enemydot
-# if xcoord in acceptable_values and ycoord in acceptable_values:
-# if board[xcoord - 1][ycoord - 1] == "_":
-# board[xcoord - 1][ycoord - 1] = dot
-# return board
-# else:
-# print("Not available")
-# else:
-# print(f"not an accepted value: either {xcoord} or {ycoord}")
-
-
-def placedot2(board, placer):
+def placedot(board, placer):
     originalBoard = board
     while originalBoard == board:
         if placesLeft(board) == 0:
@@ -84,7 +58,6 @@ def placedot2(board, placer):
 
 def findWinner(board):
     row = list()
-    dot2name = {playerdot: "player", enemydot: "enemy"}
     for placerdot in [playerdot, enemydot]:
         winningThree = [placerdot, placerdot, placerdot]
         for column in board:
@@ -103,6 +76,27 @@ def findWinner(board):
             row = []
 
 
+def findAboutToWin(board, threatdot, gooddot):
+    row = list()
+    for column in board:
+        if column.count(threatdot) == 2 and column.count(gooddot) < 1:
+            return threatdot
+    if board[1][1] == threatdot:
+        if board[0][0] == threatdot and board[2][2] != gooddot:
+            return threatdot
+        if board[0][2] == threatdot and board[2][0] != gooddot:
+            return threatdot
+        if board[2][2] == threatdot and board[0][0] != gooddot:
+            return threatdot
+        if board[2][0] == threatdot and board[0][2] != gooddot:
+            return threatdot
+    for i in range(3):
+        for j in range(3):
+            row.append(board[j][i])
+        if row.count(threatdot) == 2 and row.count(gooddot) < 1:
+            return threatdot
+
+
 # init
 board = makeboard()
 if __name__ == "__main__":
@@ -110,9 +104,8 @@ if __name__ == "__main__":
     while playgame:
         if placesLeft(board) > 0 and not findWinner(board):
             print(printboard(board))
-            board = placedot2(board, "player")
-            board = placedot2(board, "enemy")
-            # clear()
+            board = placedot(board, "player")
+            board = placedot(board, "enemy")
         else:
             print(printboard(board))
             print("Game over")
