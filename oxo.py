@@ -1,10 +1,18 @@
 #!/usr/bin/env python3
 from random import choice
+from os import name, system
 
 enemydot = "X"
 playerdot = "O"
 acceptable_values = [0, 1, 2]
 dot2name = {playerdot: "player", enemydot: "enemy"}
+
+
+def clear():
+    if name == "posix":
+        _ = system("clear")
+    if name == "nt":
+        _ = system("cls")
 
 
 def makeboard():
@@ -113,6 +121,7 @@ board = makeboard()
 if __name__ == "__main__":
     playgame = True
     while playgame:
+        clear()
         if placesLeft(board) > 0 and not findWinner(board):
             print(printboard(board))
             board = placedot(board, "player")
