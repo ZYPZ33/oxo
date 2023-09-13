@@ -29,31 +29,39 @@ def printboard(b):
 
 def placedot(board, placer):
     originalBoard = board
-    while originalBoard == board:
-        if placesLeft(board) == 0:
-            return board
-        if placer == "player":
-            x = int(input("Enter x coordinate: ")) - 1
-            y = int(input("Enter y coordinate: ")) - 1
-            dot = playerdot
-        else:
-            x = choice(acceptable_values)
-            y = choice(acceptable_values)
-            dot = enemydot
-        if x in acceptable_values:
-            if y in acceptable_values:
-                if board[x][y] == "_":
-                    board[x][y] = dot
-                    return board
+    if not findWinner(board):
+        while originalBoard == board:
+            if placesLeft(board) == 0:
+                return board
+            if placer == "player":
+                x = int(input("Enter x coordinate: ")) - 1
+                y = int(input("Enter y coordinate: ")) - 1
+                dot = playerdot
+            else:
+                nextPlaces = findAboutToWin(board, playerdot, enemydot)
+                if nextPlaces:
+                    x = nextPlaces[0]
+                    y = nextPlaces[1]
+                else:
+                    x = choice(acceptable_values)
+                    y = choice(acceptable_values)
+                dot = enemydot
+            if x in acceptable_values:
+                if y in acceptable_values:
+                    if board[x][y] == "_":
+                        board[x][y] = dot
+                        return board
+                    else:
+                        if placer == "player":
+                            print("Space already filled")
                 else:
                     if placer == "player":
-                        print("Space already filled")
+                        print(f"{y+1} not a valid Y coordinate")
             else:
                 if placer == "player":
-                    print(f"{y+1} not a valid Y coordinate")
-        else:
-            if placer == "player":
-                print(f"{x+1} not a valid X coordinate")
+                    print(f"{x+1} not a valid X coordinate")
+    else:
+        return board
 
 
 def findWinner(board):
@@ -77,24 +85,27 @@ def findWinner(board):
 
 
 def findAboutToWin(board, threatdot, gooddot):
-    row = list()
-    for column in board:
+    for x in range(len(board)):
+        column = board[x]
         if column.count(threatdot) == 2 and column.count(gooddot) < 1:
-            return threatdot
+            y = column.index("_")
+            return [x, y]
     if board[1][1] == threatdot:
         if board[0][0] == threatdot and board[2][2] != gooddot:
-            return threatdot
+            return [2, 2]
         if board[0][2] == threatdot and board[2][0] != gooddot:
-            return threatdot
+            return [2, 0]
         if board[2][2] == threatdot and board[0][0] != gooddot:
-            return threatdot
+            return [0, 0]
         if board[2][0] == threatdot and board[0][2] != gooddot:
-            return threatdot
-    for i in range(3):
-        for j in range(3):
-            row.append(board[j][i])
+            return [0, 2]
+    for x in range(3):
+        row = list()
+        for y in range(3):
+            row.append(board[y][x])
         if row.count(threatdot) == 2 and row.count(gooddot) < 1:
-            return threatdot
+            y = row.index("_")
+            return [y, x]
 
 
 # init
