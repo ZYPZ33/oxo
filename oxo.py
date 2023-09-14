@@ -49,8 +49,16 @@ def takeTurn(board, placer, size, dotdictionary):
     ):
         if placer == "player":
             dot = dotdictionary[placer]
-            col = int(input("Enter X coordinate: ")) - 1
-            row = int(input("Enter Y coordinate: ")) - 1
+            correct = False
+            col = 2
+            row = 2
+            while not correct:
+                col = input("Enter X coordinate: ")
+                row = input("Enter Y coordinate: ")
+                if col.isnumeric() and row.isnumeric():
+                    col = int(col) - 1
+                    row = int(row) - 1
+                    correct = True
         else:
             dot = "X"
             nextcoords = findNextCoords(board, "X")
@@ -137,8 +145,10 @@ def game(argv):
         clear()
         printBoard(board)
         print(f"Winner is the {findWinner(board, dotdictionary)}!")
+        return 0
     else:
         print("Game is a draw")
+        return 0
 
 
 if __name__ == "__main__":

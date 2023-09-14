@@ -1,8 +1,13 @@
+# cache
 __pycache__/
 .mypy_cache/
-*.old
 
+# environments
 env/
 venv/
 
+# self
 .gitignore
+
+# archives
+*.xz
