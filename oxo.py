@@ -129,7 +129,7 @@ def game(argv):
     board = makeBoard(arglist[0])
     dotdictionary = {"player": "O", "computer": "X"}
     while not boardEmpty(board) and not findWinner(board, dotdictionary):
-        # clear()
+        clear()
         printBoard(board)
         takeTurn(board, "player", arglist[0], dotdictionary)
         takeTurn(board, "computer", arglist[0], dotdictionary)
