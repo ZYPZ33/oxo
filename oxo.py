@@ -1,137 +1,145 @@
 #!/usr/bin/env python3
 from random import choice
 from os import name, system
-
-enemydot = "X"
-playerdot = "O"
-acceptable_values = [0, 1, 2]
-dot2name = {playerdot: "player", enemydot: "enemy"}
+from sys import argv
 
 
 def clear():
     if name == "posix":
-        _ = system("clear")
+        system("clear")
     if name == "nt":
-        _ = system("cls")
+        system("cls")
 
 
-def makeboard():
-    return [["_" for row in range(3)] for column in range(3)]
+def interpretArgument(argument, argv, default_value):
+    if (
+        argument in argv
+        and argv.index(argument) < len(argv)
+        and argv.count(argument) == 1
+    ):
+        return int(argv[argv.index(argument) + 1])
+    else:
+        return default_value
 
 
-def placesLeft(board):
-    spaces = 0
+def readArguments(argv):
+    size = interpretArgument("-s", argv, 3)
+    level = interpretArgument("-l", argv, 3)
+    return [size, level]
+
+
+def makeBoard(size, space="_"):
+    return [[space for row in range(size)] for column in range(size)]
+
+
+def printBoard(board):
     for row in board:
-        for area in row:
-            if area == "_":
-                spaces += 1
-    return spaces
+        for item in row:
+            print(item, end=" ")
+        print()
 
 
-def printboard(b):
-    return f"____1___2___3____\n1|  {b[0][0]}\
- | {b[1][0]} | {b[2][0]}  |\n2|  {b[0][1]}\
- | {b[1][1]} | {b[2][1]}  |\n3|  {b[0][2]}\
- | {b[1][2]} | {b[2][2]}  |"
-
-
-def placedot(board, placer):
+def takeTurn(board, placer, size, dotdictionary):
+    acceptableValues = list(range(size))
     originalBoard = board
-    if not findWinner(board):
-        while originalBoard == board:
-            if placesLeft(board) == 0:
-                return board
-            if placer == "player":
-                x = int(input("Enter x coordinate: ")) - 1
-                y = int(input("Enter y coordinate: ")) - 1
-                dot = playerdot
+    while (
+        board == originalBoard
+        and not boardEmpty(board)
+        and not findWinner(board, dotdictionary)
+    ):
+        if placer == "player":
+            dot = dotdictionary[placer]
+            col = int(input("Enter X coordinate: ")) - 1
+            row = int(input("Enter Y coordinate: ")) - 1
+        else:
+            dot = "X"
+            nextcoords = findNextCoords(board, "X")
+            if not nextcoords:
+                nextcoords = findNextCoords(board, "O")
+            if nextcoords:
+                row = nextcoords[0]
+                col = nextcoords[1]
             else:
-                nextPlaces = findAboutToWin(board, playerdot, enemydot)
-                if nextPlaces:
-                    x = nextPlaces[0]
-                    y = nextPlaces[1]
-                else:
-                    x = choice(acceptable_values)
-                    y = choice(acceptable_values)
-                dot = enemydot
-            if x in acceptable_values:
-                if y in acceptable_values:
-                    if board[x][y] == "_":
-                        board[x][y] = dot
-                        return board
-                    else:
-                        if placer == "player":
-                            print("Space already filled")
+                row = choice(acceptableValues)
+                col = choice(acceptableValues)
+        if row in acceptableValues:
+            if col in acceptableValues:
+                if board[row][col] == "_":
+                    board[row][col] = dot
+                    return board
                 else:
                     if placer == "player":
-                        print(f"{y+1} not a valid Y coordinate")
+                        print("Not an available space")
             else:
-                if placer == "player":
-                    print(f"{x+1} not a valid X coordinate")
-    else:
-        return board
-
-
-def findWinner(board):
-    row = list()
-    for placerdot in [playerdot, enemydot]:
-        winningThree = [placerdot, placerdot, placerdot]
-        for column in board:
-            if column == winningThree:
-                return dot2name[placerdot]
-        if board[1][1] == placerdot:
-            if board[0][0] == placerdot and board[2][2] == placerdot:
-                return dot2name[placerdot]
-            if board[2][0] == placerdot and board[0][2] == placerdot:
-                return dot2name[placerdot]
-        for i in range(3):
-            for j in range(3):
-                row.append(board[j][i])
-            if row == winningThree:
-                return dot2name[placerdot]
-            row = []
-
-
-def findAboutToWin(board, threatdot, gooddot):
-    for x in range(len(board)):
-        column = board[x]
-        if column.count(threatdot) == 2 and column.count(gooddot) < 1:
-            y = column.index("_")
-            return [x, y]
-    if board[1][1] == threatdot:
-        if board[0][0] == threatdot and board[2][2] != gooddot:
-            return [2, 2]
-        if board[0][2] == threatdot and board[2][0] != gooddot:
-            return [2, 0]
-        if board[2][2] == threatdot and board[0][0] != gooddot:
-            return [0, 0]
-        if board[2][0] == threatdot and board[0][2] != gooddot:
-            return [0, 2]
-    for x in range(3):
-        row = list()
-        for y in range(3):
-            row.append(board[y][x])
-        if row.count(threatdot) == 2 and row.count(gooddot) < 1:
-            y = row.index("_")
-            return [y, x]
-
-
-# init
-board = makeboard()
-if __name__ == "__main__":
-    playgame = True
-    while playgame:
-        clear()
-        if placesLeft(board) > 0 and not findWinner(board):
-            print(printboard(board))
-            board = placedot(board, "player")
-            board = placedot(board, "enemy")
+                print(f"Not acceptable value: {col+1}")
         else:
-            print(printboard(board))
-            print("Game over")
-            winner = findWinner(board)
-            if winner:
-                print(f"{winner} wins")
-            else:
-                print("draw")
-            playgame = False
+            print(f"Not acceptable value: {row+1}")
+
+
+def findWinner(board, dotdictionary):
+    for placer in dotdictionary:
+        dot = dotdictionary[placer]
+        for row in board:
+            if row.count(dot) == 3:
+                return placer
+        for i in range(len(board)):
+            column = list()
+            for j in range(len(board)):
+                column.append(board[j][i])
+            if column.count(dot) == 3:
+                return placer
+        if board[1][1] == dot:
+            if board[0][0] == dot and board[2][2] == dot:
+                return placer
+            if board[0][2] == dot and board[2][0] == dot:
+                return placer
+    return False
+
+
+def findNextCoords(board, threatDot):
+    for row in range(len(board)):
+        if board[row].count(threatDot) == 2 and "_" in board[row]:
+            return [row, board[row].index("_")]
+    for i in range(len(board)):
+        column = list()
+        for j in range(len(board)):
+            column.append(board[j][i])
+        if column.count(threatDot) == 2 and "_" in column:
+            return [column.index("_"), i]
+    if board[1][1] == threatDot:
+        if board[0][0] == threatDot and board[2][2] == "_":
+            return [2, 2]
+        if board[2][2] == threatDot and board[0][0] == "_":
+            return [0, 0]
+        if board[0][2] == threatDot and board[2][0] == "_":
+            return [2, 0]
+        if board[2][0] == threatDot and board[0][2] == "_":
+            return [0, 2]
+
+
+def boardEmpty(board):
+    for row in board:
+        if "_" in row:
+            return False
+    return True
+
+
+def game(argv):
+    arglist = readArguments(argv)
+    board = makeBoard(arglist[0])
+    dotdictionary = {"player": "O", "computer": "X"}
+    while not boardEmpty(board) and not findWinner(board, dotdictionary):
+        # clear()
+        printBoard(board)
+        takeTurn(board, "player", arglist[0], dotdictionary)
+        takeTurn(board, "computer", arglist[0], dotdictionary)
+    if findWinner(board, dotdictionary):
+        clear()
+        printBoard(board)
+        print(f"Winner is the {findWinner(board, dotdictionary)}!")
+    else:
+        print("Game is a draw")
+
+
+if __name__ == "__main__":
+    game(argv)
