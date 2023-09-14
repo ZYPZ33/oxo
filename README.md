@@ -1,2 +1,2 @@
-# oxo2
-Remade version of oxo
+# oxo
+An naughts and crosses game made in python. For A-Level computer science
