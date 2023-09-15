@@ -3,6 +3,15 @@ from random import choice
 from os import name, system
 from sys import argv
 
+if "-h" in argv:
+    print(
+        "Options:\n\
+    -h\tPrint this message\n\
+    -s\tSet the size of the game board\n\
+    -l\tSet the AI level"
+    )
+    exit()
+
 
 def clear():
     if name == "posix":
@@ -14,7 +23,7 @@ def clear():
 def interpretArgument(argument, argv, default_value):
     if (
         argument in argv
-        and argv.index(argument) < len(argv)
+        and argv.index(argument) < len(argv) + 1
         and argv.count(argument) == 1
     ):
         return int(argv[argv.index(argument) + 1])
@@ -25,6 +34,8 @@ def interpretArgument(argument, argv, default_value):
 def readArguments(argv):
     size = interpretArgument("-s", argv, 3)
     level = interpretArgument("-l", argv, 3)
+    if size < 3:
+        size = 3
     return [size, level]
 
 
@@ -39,7 +50,7 @@ def printBoard(board):
         print()
 
 
-def takeTurn(board, placer, size, dotdictionary):
+def takeTurn(board, placer, size, dotdictionary, level):
     acceptableValues = list(range(size))
     originalBoard = board
     while (
@@ -60,13 +71,19 @@ def takeTurn(board, placer, size, dotdictionary):
                     row = int(row) - 1
                     correct = True
         else:
+            nextcoords = list()
             dot = "X"
-            if realCount(board, "_") == (size**2 - 1) and board[1][1] == "_":
+            if (
+                realCount(board, "_") == (size**2 - 1)
+                and board[1][1] == "_"
+                and level > 2
+            ):
                 nextcoords = [1, 1]
             else:
-                nextcoords = findNextCoords(board, "X")
-            if not nextcoords:
-                nextcoords = findNextCoords(board, "O")
+                if level > 1:
+                    nextcoords = findNextCoords(board, "X")
+                    if not nextcoords:
+                        nextcoords = findNextCoords(board, "O")
             if nextcoords:
                 row = nextcoords[0]
                 col = nextcoords[1]
@@ -148,8 +165,8 @@ def game(arglist):
     while not boardEmpty(board) and not findWinner(board, dotdictionary):
         clear()
         printBoard(board)
-        takeTurn(board, "player", arglist[0], dotdictionary)
-        takeTurn(board, "computer", arglist[0], dotdictionary)
+        takeTurn(board, "player", arglist[0], dotdictionary, arglist[1])
+        takeTurn(board, "computer", arglist[0], dotdictionary, arglist[1])
     if findWinner(board, dotdictionary):
         clear()
         printBoard(board)
