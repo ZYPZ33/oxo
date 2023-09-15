@@ -1,13 +1,13 @@
-# cache
+# ignore python cache
 __pycache__/
 .mypy_cache/
 
-# environments
+# ignore environments
 env/
 venv/
 
-# self
+# ignore self
 .gitignore
 
-# archives
+# ignore archives
 *.xz
