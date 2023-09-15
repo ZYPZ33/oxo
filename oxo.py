@@ -6,9 +6,9 @@ from sys import argv
 if "-h" in argv:
     print(
         "Options:\n\
-    -h\tPrint this message\n\
-    -s\tSet the size of the game board\n\
-    -l\tSet the AI level"
+    -h\tPrint this help message\n\
+    -s\tSet the size of the game board (must be greater than 3)\n\
+    -l\tSet the AI level (1-3)"
     )
     exit()
 
