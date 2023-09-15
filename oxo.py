@@ -61,7 +61,10 @@ def takeTurn(board, placer, size, dotdictionary):
                     correct = True
         else:
             dot = "X"
-            nextcoords = findNextCoords(board, "X")
+            if realCount(board, "_") == (size**2 - 1) and board[1][1] == "_":
+                nextcoords = [1, 1]
+            else:
+                nextcoords = findNextCoords(board, "X")
             if not nextcoords:
                 nextcoords = findNextCoords(board, "O")
             if nextcoords:
@@ -79,9 +82,16 @@ def takeTurn(board, placer, size, dotdictionary):
                     if placer == "player":
                         print("Not an available space")
             else:
-                print(f"Not acceptable value: {col+1}")
+                print(f"Not acceptable value: {int(col)+1}")
         else:
-            print(f"Not acceptable value: {row+1}")
+            print(f"Not acceptable value: {int(row)+1}")
+
+
+def realCount(array, character):
+    count = 0
+    for row in array:
+        count += row.count(character)
+    return count
 
 
 def findWinner(board, dotdictionary):
@@ -132,8 +142,7 @@ def boardEmpty(board):
     return True
 
 
-def game(argv):
-    arglist = readArguments(argv)
+def game(arglist):
     board = makeBoard(arglist[0])
     dotdictionary = {"player": "O", "computer": "X"}
     while not boardEmpty(board) and not findWinner(board, dotdictionary):
@@ -152,4 +161,5 @@ def game(argv):
 
 
 if __name__ == "__main__":
-    game(argv)
+    arglist = readArguments(argv)
+    game(arglist)
