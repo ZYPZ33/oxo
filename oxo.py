@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 from random import choice
 from os import name, system
+from time import sleep
 from sys import argv
 
 if "-h" in argv or "--help" in argv:
     print(
-        "Usage: oxo OPTION... [FILE]...\n\
-    --help  -h\tPrint this help message\n\
-    --size  -s\tSet the size of the game board (must be greater than 3)\n\
-    --level -l\tSet the AI level (1-3)"
+        "Usage: oxo OPTION...\n\
+    --help   -h\tPrint this help message\n\
+    --size   -s\tSet the size of the game board (must be greater than 3)\n\
+    --level  -l\tSet the AI level (1-3)\n\
+    --repeat -r\tMake game loop"
     )
     exit()
 
@@ -36,9 +38,15 @@ def readArguments(argv):
     level = interpretArgument("-l", argv, 3)
     size = interpretArgument("--size", argv, size)
     level = interpretArgument("--level", argv, size)
+    if "--repeat" in argv or "-r" in argv:
+        repeat = "Y"
+    else:
+        repeat = "N"
+
     if size < 3:
         size = 3
-    return [size, level]
+
+    return [size, level, repeat]
 
 
 def makeBoard(size, space="_"):
@@ -162,21 +170,25 @@ def boardEmpty(board):
 
 
 def game(arglist):
-    board = makeBoard(arglist[0])
-    dotdictionary = {"player": "O", "computer": "X"}
-    while not boardEmpty(board) and not findWinner(board, dotdictionary):
-        clear()
-        printBoard(board)
-        takeTurn(board, "player", arglist[0], dotdictionary, arglist[1])
-        takeTurn(board, "computer", arglist[0], dotdictionary, arglist[1])
-    if findWinner(board, dotdictionary):
-        clear()
-        printBoard(board)
-        print(f"Winner is the {findWinner(board, dotdictionary)}!")
-        return 0
-    else:
-        print("Game is a draw")
-        return 0
+    playGame = True
+    while playGame:
+        board = makeBoard(arglist[0])
+        dotdictionary = {"player": "O", "computer": "X"}
+        while not boardEmpty(board) and not findWinner(board, dotdictionary):
+            clear()
+            printBoard(board)
+            takeTurn(board, "player", arglist[0], dotdictionary, arglist[1])
+            takeTurn(board, "computer", arglist[0], dotdictionary, arglist[1])
+        if findWinner(board, dotdictionary):
+            clear()
+            printBoard(board)
+            print(f"Winner is the {findWinner(board, dotdictionary)}!")
+        else:
+            print("Game is a draw")
+        if arglist[2] == "Y":
+            sleep(2)
+        else:
+            playGame = False
 
 
 if __name__ == "__main__":
