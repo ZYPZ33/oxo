@@ -34,6 +34,8 @@ def interpretArgument(argument, argv, default_value):
 def readArguments(argv):
     size = interpretArgument("-s", argv, 3)
     level = interpretArgument("-l", argv, 3)
+    size = interpretArgument("--size", argv, size)
+    level = interpretArgument("--level", argv, size)
     if size < 3:
         size = 3
     return [size, level]
