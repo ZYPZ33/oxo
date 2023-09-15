@@ -82,10 +82,10 @@ def takeTurn(board, placer, size, dotdictionary, level):
             ):
                 nextcoords = [1, 1]
             else:
-                if level > 1:
+                if level > 2:
                     nextcoords = findNextCoords(board, "X")
-                    if not nextcoords:
-                        nextcoords = findNextCoords(board, "O")
+            if not nextcoords and level > 1:
+                nextcoords = findNextCoords(board, "O")
             if nextcoords:
                 row = nextcoords[0]
                 col = nextcoords[1]
