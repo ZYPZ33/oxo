@@ -3,12 +3,12 @@ from random import choice
 from os import name, system
 from sys import argv
 
-if "-h" in argv:
+if "-h" in argv or "--help" in argv:
     print(
-        "Options:\n\
-    -h\tPrint this help message\n\
-    -s\tSet the size of the game board (must be greater than 3)\n\
-    -l\tSet the AI level (1-3)"
+        "Usage: oxo OPTION... [FILE]...\n\
+    --help  -h\tPrint this help message\n\
+    --size  -s\tSet the size of the game board (must be greater than 3)\n\
+    --level -l\tSet the AI level (1-3)"
     )
     exit()
 
