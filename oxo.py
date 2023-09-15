@@ -23,7 +23,7 @@ def clear():
 def interpretArgument(argument, argv, default_value):
     if (
         argument in argv
-        and argv.index(argument) < len(argv) + 1
+        and argv.index(argument) < len(argv) - 1
         and argv.count(argument) == 1
     ):
         return int(argv[argv.index(argument) + 1])
