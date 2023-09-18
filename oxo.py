@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from guizero import App, Text
 from random import choice
 from os import name, system
 from time import sleep
