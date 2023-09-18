@@ -1,17 +1,18 @@
 from guizero import App, Text, PushButton, Picture, TextBox
 
+size = 200
 titlename = "Hello Qt!"
-app = App(title=titlename, width=200, height=200)
+app = App(title=titlename, width=size, height=size)
 board = [["_" for row in range(3)] for column in range(3)]
 
-o1 = Text(app, text="\nHello,\n Openbox!")
+message = Text(app, text="\nHello,\n Openbox!")
 
-o2 = Picture(app)
-o2.image = "/home/user/image.jpg"
+openBoximage = Picture(app)
+openBoximage.image = "/home/user/image.jpg"
 
-i1 = TextBox(app)
+inputBox = TextBox(app)
 
-i2 = PushButton(app, text="Hello!", command=exit)
+buttonBox = PushButton(app, text="Hello!", command=exit)
 
 
 app.display()
