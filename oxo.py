@@ -83,12 +83,12 @@ def takeTurn(board, placer, size, dotdictionary, level):
         else:
             nextcoords = list()
             dot = "X"
-            if (
-                realCount(board, "_") == (size**2 - 1)
-                and board[1][1] == "_"
-                and level > 2
+            if realCount(board, "_") == (size**2 - 1) and level > 2):
+                if board[1][1] == "_":
+                    nextcoords = [1, 1]
+                else:
+                    nextcoords = choice([[0, 0],[2, 2],[2, 0],[0, 2]])
             ):
-                nextcoords = [1, 1]
             else:
                 if level > 2:
                     nextcoords = findNextCoords(board, "X")
