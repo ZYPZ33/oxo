@@ -29,7 +29,7 @@ class MainWindow(QWidget):
                 self.button[row][column].setGeometry(40*column+80,40*row+20,40,40)
                 self.button[row][column].clicked.connect(self.on_button_click)
     def on_button_click(self):
-        print(self.button[row][column])
+        print(self.button[][])
 
 if __name__ == "__main__":
     app = QApplication(argv)
