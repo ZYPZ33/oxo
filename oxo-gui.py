@@ -62,12 +62,7 @@ class MainWindow(QWidget):
             for column in range(len(board)):
                 self.button[row][column] = QPushButton(" ", self)
                 self.button[row][column].setGeometry(40*column+80,40*row+20,40,40)
-                self.button[row][column].clicked.connect(lambda: self.button[row][column].setText("X")) #self.on_button_click())
-
-    def on_button_click(self,xy):
-        print(xy)
-        #self.button[x][y].setText("X")
-        #print(self.button[x][y].text())
+                self.button[row][column].clicked.connect(lambda: self.button[row][column].setText("X"))
 
 if __name__ == "__main__":
     arglist = readArguments(argv)
