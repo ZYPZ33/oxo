@@ -37,7 +37,7 @@ def readArguments(argv):
     size = interpretArgument("-s", argv, 3)
     level = interpretArgument("-l", argv, 3)
     size = interpretArgument("--size", argv, size)
-    level = interpretArgument("--level", argv, size)
+    level = interpretArgument("--level", argv, level)
     if "--repeat" in argv or "-r" in argv:
         repeat = "Y"
     else:
