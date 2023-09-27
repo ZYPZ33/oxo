@@ -25,20 +25,20 @@ def interpretArgument(argument, argv, default_value):
 
 
 def readArguments(argv):
-    size = interpretArgument("-s", argv, 3)
+    size = interpretArgument('-s', argv, 3)
     size = interpretArgument("--size", argv, size)
-    level = interpretArgument("-l", argv, 3)
+    level = interpretArgument('-l', argv, 3)
     level = interpretArgument("--level", argv, level)
-    if "--repeat" in argv or "-r" in argv:
-        repeat = "Y"
+    if "--repeat" in argv or '-r' in argv:
+        repeat = 'Y'
     else:
-        repeat = "N"
+        repeat = 'N'
     if size < 3:
         size = 3
 
     return [size, level, repeat]
 
-def makeBoard(size, space="_"):
+def makeBoard(size, space='_'):
     return [[space for row in range(size)] for column in range(size)]
 
 class MainWindow(QWidget):
@@ -60,13 +60,13 @@ class MainWindow(QWidget):
 
         for row in range(len(board)):
             for column in range(len(board)):
-                self.button[row][column] = QPushButton(" ", self)
+                self.button[row][column] = QPushButton(' ', self)
                 self.button[row][column].setGeometry(40*column+80,40*row+20,40,40)
                 self.button[row][column].clicked.connect(lambda: self.button[row][column].setText("X"))
 
 if __name__ == "__main__":
     arglist = readArguments(argv)
-    board = makeBoard(arglist[0], "_")
+    board = makeBoard(arglist[0], '_')
     app = QApplication(argv)
     window = MainWindow()
     window.show()
