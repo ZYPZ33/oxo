@@ -13,7 +13,7 @@ if "-h" in argv or "--help" in argv:
           )
     exit()
 
-def interpretArgument(argument, argv, default_value):
+def interpretArgument(argument, argv, defaultValue):
     if (
             argument in argv
             and argv.index(argument) < len(argv) - 1
@@ -21,7 +21,7 @@ def interpretArgument(argument, argv, default_value):
         ):
         return int(argv[argv.index(argument) + 1])
     else:
-        return default_value
+        return defaultValue
 
 
 def readArguments(argv):
