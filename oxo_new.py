@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from PyQt5.QtWidgets import QWidget
 from random import choice
 from os import name, system
 from time import sleep
@@ -14,13 +15,7 @@ if "-h" in argv or "--help" in argv:
     )
     exit()
 
-
-def clear():
-    if name == "posix":
-        system("clear")
-    if name == "nt":
-        system("cls")
-
+class MainWindow(QWidget)
 
 def interpretArgument(argument, argv, default_value):
     if (
@@ -51,13 +46,6 @@ def readArguments(argv):
 
 def makeBoard(size, space="_"):
     return [[space for row in range(size)] for column in range(size)]
-
-
-def printBoard(board):
-    for row in board:
-        for item in row:
-            print(item, end=" ")
-        print()
 
 
 def takeTurn(board, placer, size, dotdictionary, level):
